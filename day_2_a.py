@@ -1,18 +1,16 @@
-#!/bin/bash
-
-set -e
-
-if [[ $# -lt 1 ]]; then
-  echo "No filename provided" >&2
-  exit 1
-fi
-
-cat >"$1" <<EOF
 import argparse
+import collections.abc
 import coloredlogs
 import logging
 import pathlib
 import typing
+
+
+def iter_number_ranges(content: str) -> collections.abc.Iterable[tuple[int, int]]:
+    for part in content.split(","):
+        start, end = part.split("-")
+
+        yield int(start), int(end)
 
 
 def main():
@@ -27,28 +25,31 @@ def main():
     coloredlogs.install(
         format="%(asctime)s %(levelname)s %(name)s %(message)s",
         datefmt="%Y-%m-%d %H:%M:%S",
-        level=logging.DEBUG if debug else logging.INFO
+        level=logging.DEBUG if debug else logging.INFO,
     )
 
     logging.info(f"Input file: {input_filename}")
 
     solution = 0
-    lines: list[str] = []
 
     with pathlib.Path(input_filename).open("r") as fp:
-        for line in fp:
-            logging.debug("Reading line: %s", line)
+        for start, end in iter_number_ranges(fp.read()):
+            logging.debug("Next number range: %s-%s", start, end)
 
-            lines.append(line)
+            for n in range(start, end + 1):
+                value = str(n)
+                value_length = len(value)
 
-    logging.info(f"Read {len(lines)} lines from {input_filename}")
+                if value_length % 2 != 0:
+                    continue
 
-    # ...
+                middle = int(value_length / 2)
+
+                if value[0:middle] == value[middle:]:
+                    solution += n
 
     logging.info(f"Solution: {solution}")
 
 
 if __name__ == "__main__":
     main()
-
-EOF

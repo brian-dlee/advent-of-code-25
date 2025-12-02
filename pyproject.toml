@@ -9,5 +9,6 @@ dependencies = []
 [dependency-groups]
 dev = [
     "basedpyright>=1.34.0",
+    "coloredlogs>=15.0.1",
     "ruff>=0.14.7",
 ]
