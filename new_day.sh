@@ -33,17 +33,12 @@ def main():
     logging.info(f"Input file: {input_filename}")
 
     solution = 0
-    lines: list[str] = []
 
     with pathlib.Path(input_filename).open("r") as fp:
         for line in fp:
             logging.debug("Reading line: %s", line)
 
-            lines.append(line)
-
-    logging.info(f"Read {len(lines)} lines from {input_filename}")
-
-    # ...
+            solution += len(line)
 
     logging.info(f"Solution: {solution}")
 
