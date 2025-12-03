@@ -36,7 +36,7 @@ def main():
 
     with pathlib.Path(input_filename).open("r") as fp:
         for line in fp:
-            logging.debug("Reading line: %s", line)
+            logging.debug("Reading line: %s", line.strip())
 
             solution += len(line)
 
